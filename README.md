@@ -19,6 +19,7 @@ Ref.: Balta.io
     <li><a href="#fund-mauexemplo">Mau exemplo</a></li>
     <li><a href="#fund-entendendo">Entendendo o problema</a></li>
     <li><a href="#fund-resolvendo">Resolvendo o problema com OOP</a></li>
+    <li><a href="#fund-descobre">Cobre o pé, descobre a cabeça</a></li>
 </ul>
 
 </details>
@@ -396,6 +397,22 @@ public class OrderController : Controller
   }
 }
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Cobre o pé, descobre a cabeça -->
+
+<details id="fund-descobre"><summary>Cobre o pé, descobre a cabeça</summary>
+
+<br/>
+
+- Está **bem melhor**, mas...
+- A **dependência** ainda existe
+  - Só mudou de lugar
+- Depende de **implementação**
+  - Depender da **abstração**
 
 </details>
 
