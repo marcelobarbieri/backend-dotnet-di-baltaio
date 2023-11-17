@@ -20,6 +20,7 @@ Ref.: Balta.io
     <li><a href="#fund-entendendo">Entendendo o problema</a></li>
     <li><a href="#fund-resolvendo">Resolvendo o problema com OOP</a></li>
     <li><a href="#fund-descobre">Cobre o pé, descobre a cabeça</a></li>
+    <li><a href="#fund-inversao">Inversão de Controle</a></li>
 </ul>
 
 </details>
@@ -413,6 +414,60 @@ public class OrderController : Controller
   - Só mudou de lugar
 - Depende de **implementação**
   - Depender da **abstração**
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Inversão de Controle -->
+
+<details id="fund-inversao"><summary>Inversão de Controle</summary>
+
+<br/>
+
+Inversion of Control
+
+- **Inversão de Controle**
+- **Externaliza** as responsabilidades
+  - **Delega**
+- **Cria uma dependência** externa
+  - O controller não é mais **responsável** pelo cálculo do frete, agora ele **depende de um serviço**
+
+```c#
+public class OrderController : Controller
+{
+  private readonly DeliveryService _deliveryService;
+
+  OrderController(DeliveryService deliveryService)
+  {
+    _deliveryService = deliveryService;
+  }
+
+  [Route("v1/orders")]
+  [HttpPost]
+  public async Task<string> Place (
+    string customerId,
+    string zipCode,
+    string promoCode,
+    int[] products
+  )
+  {
+    ...
+    decimal deliveryFee = _deliveryService.GetDeliveryFee(zipCode);
+    ...
+  }
+}
+```
+
+```c#
+[TestMethod]
+public void ShouldPlaceAnOrder()
+{
+  var service = new DeliveryService();
+  var controller = new OrderController(service);
+  ...
+}
+```
 
 </details>
 
