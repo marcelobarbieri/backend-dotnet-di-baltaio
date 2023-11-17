@@ -14,6 +14,7 @@ Ref.: Balta.io
 
 <ul>
     <li><a href="#fund-apresentacao">Apresentação</a></li>
+    <li><a href="#fund-oquee">O que é injeção de dependência</a></li>
 </ul>
 
 </details>
@@ -54,6 +55,29 @@ app.MagGet("/", () => "Dependency Injection!");
 
 app.Run();
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region O que é injeção de dependência  -->
+
+<details id="fund-oquee"><summary>O que é injeção de dependência</summary>
+
+<br/>
+
+> Um termo bem confuso
+
+Dependency Injection
+
+- **Não é um padrão** (Design Pattern)
+- Técnica que **implementa o IoC**
+  - **IoC - Inversion of Control** (Inversão de Controle)
+  - **DIP - Dependency Inversion Principle** (Princípio da Inversão de Dependência)
+- Ajuda no baixo acoplamento
+- Provê uma melhor divisão de responsabilidades
+- O que eu preciso para trabalhar?
+  - Quem vai me prover? Não importa.
 
 </details>
 
