@@ -15,6 +15,7 @@ Ref.: Balta.io
 <ul>
     <li><a href="#fund-apresentacao">Apresentação</a></li>
     <li><a href="#fund-oquee">O que é injeção de dependência</a></li>
+    <li><a href="#fund-baixoacoplamento">Baixo acoplamento</a></li>
 </ul>
 
 </details>
@@ -23,7 +24,7 @@ Ref.: Balta.io
 
 <!--#endregion -->
 
-<!--#region Fundamentoss -->
+<!--#region Fundamentos -->
 
 <h2 id="fund">Fundamentos</h2>
 
@@ -82,6 +83,22 @@ Dependency Injection
 </details>
 
 <!--#endregion -->
+
+<!--#region Baixo acoplamento -->
+
+<details id="fund-baixoacoplamento"><summary>Baixo acoplamento</summary>
+
+<br/>
+
+- Imagina um sistema **grande**
+- Cada pedacinho tem que **focar em uma coisa** (dividir para conquistar)
+  - **Não dá** pra abraçar o mundo
+- Tem que funcionar de forma **independente**
+  - Fácil de **entender**
+  - Fácil de dar **manutenção**
+  - Se precisar **jogar fora e criar outro** é fácil
+
+</details>
 
 <!--#endregion -->
 
