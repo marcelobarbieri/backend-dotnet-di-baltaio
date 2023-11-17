@@ -18,6 +18,7 @@ Ref.: Balta.io
     <li><a href="#fund-baixoacoplamento">Baixo acoplamento</a></li>
     <li><a href="#fund-mauexemplo">Mau exemplo</a></li>
     <li><a href="#fund-entendendo">Entendendo o problema</a></li>
+    <li><a href="#fund-resolvendo">Resolvendo o problema com OOP</a></li>
 </ul>
 
 </details>
@@ -241,7 +242,6 @@ O problema:
 - **Testes?** Pra quê?
 
 ```c#
-```c#
 public class OrderController : Controller
 {
   [Route("v1/orders")]
@@ -326,6 +326,75 @@ public class OrderController : Controller
   }
 }
 
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Resolvendo o problema com OOP -->
+
+<details id="fund-resolvendo"><summary>Resolvendo o problema com OOP</summary>
+
+<br/>
+
+Orientação a Objetos:
+
+- **Abstração**, **encapsulamento**
+  - **Simples** e direto
+- Pedaços **pequenos**
+- **Reusáveis**
+- **Testáveis**
+- **Legíveis**
+- **Fácil** manutenção
+
+Encapsular o código:
+
+```c#
+// #2 Calcular o frete
+
+public class DeliveryService 
+{
+  public decimal GetDeliveryFee(string zipCode)
+  {
+    var request = new HttpRequestMessage(HttpMethod.Get, "URL/" + zipCode);
+    request.Headers.Add("Accept","application/json");
+    request.Headers.Add("User-Agent","HttpClientFactory-Sample");
+
+    using (HttpClient client = new HttpClient())
+    {
+      var response = await client.SendAsync(request);
+      if (response.IsSuccessStatusCode)
+      {
+        deliveryFee = await response.Content.ReadAsAsync<decimal>();
+      }
+      else
+      {
+        deliveryFee = 5;
+      }
+    }
+  }
+}
+```
+
+```c#
+public class OrderController : Controller
+{
+  [Route("v1/orders")]
+  [HttpPost]
+  public async Task<string> Place(
+    string customerId,
+    string zipCode,
+    string promoCode,
+    int[] products
+  )
+  {
+    ...
+    var deliveryService = new DeliveryService();
+    decimal deliveryFee = deliveryService.GetDeliveryFee(zipCode);
+    ...
+  }
+}
 ```
 
 </details>
