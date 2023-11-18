@@ -43,6 +43,7 @@ Ref.: Balta.io
     <li><a href="#pratica-criando">Criando dependências</a></li>    
     <li><a href="#pratica-dip">DIP na prática</a></li>    
     <li><a href="#pratica-servicos">Utilizando serviços</a></li>    
+    <li><a href="#pratica-promocode">PromoCode Respository</a></li>    
 </ul>
 
 </details>
@@ -915,6 +916,86 @@ public class OrderController : ControllerBase
 ```
 
 </details>
+
+<!--#endregion -->
+
+<!--#region PromoCode Repository -->
+
+<details id="pratica-promocode"><summary>PromoCode Repository</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Criação de um novo item **Repositories/Contracts/IPromoCodeRepository.cs**:
+
+```c#
+using DependencyStore.Models;
+
+namespace DependencyStore.Repositories.Contracts;
+
+public interface IPromoCodeRepository
+{
+    Task<PromoCode?> GetPromoCodeAsync(string promoCode);
+}
+```
+
+Criação de um novo item **Repositories/PromoCodeRepository.cs**:
+
+```c#
+using Dapper;
+using DependencyStore.Models;
+using DependencyStore.Repositories.Contracts;
+using Microsoft.Data.SqlClient;
+
+namespace DependencyStore.Repositories;
+
+public class PromoCodeRepository : IPromoCodeRepository
+{
+    private readonly SqlConnection _connection;
+
+    public PromoCodeRepository(SqlConnection connection)
+        => _connection = connection;
+
+    public async Task<PromoCode?> GetPromoCodeAsync(string promoCode)
+    {
+        var query = $"SELECT * FROM PROMO_CODES WHERE CODE={promoCode}";
+        return await _connection.QueryFirstOrDefaultAsync<PromoCode>(query);
+    }
+}
+```
+
+Refatoração do **OrderController**:
+
+```c#
+...
+
+public class OrderController : ControllerBase
+{
+    private readonly ICustomerRepository _customerRepository;
+    private readonly IDeliveryFeeService _deliveryFeeService;
+    private readonly IPromoCodeRepository _promoCodeRespository;
+
+    public OrderController(
+        ICustomerRepository customerRepository,
+        IDeliveryFeeService deliveryFeeService,
+        IPromoCodeRepository promoCodeRespository)
+    {
+        _customerRepository = customerRepository;
+        _deliveryFeeService = deliveryFeeService;
+        _promoCodeRespository = promoCodeRespository;
+    }
+
+    [Route("v1/orders")]
+    [HttpPost]
+    public async Task<IActionResult> Place(string customerId, string zipCode, string promoCode, int[] products)
+    {
+        ...
+
+        PromoCode? cupom = await _promoCodeRespository.GetPromoCodeAsync(promoCode);
+        
+        ...
+```
 
 <!--#endregion -->
 

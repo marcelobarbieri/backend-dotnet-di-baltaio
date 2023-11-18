@@ -12,32 +12,28 @@ public class OrderController : ControllerBase
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IDeliveryFeeService _deliveryFeeService;
+    private readonly IPromoCodeRepository _promoCodeRespository;
 
     public OrderController(
         ICustomerRepository customerRepository,
-        IDeliveryFeeService deliveryFeeService)
+        IDeliveryFeeService deliveryFeeService,
+        IPromoCodeRepository promoCodeRespository)
     {
         _customerRepository = customerRepository;
         _deliveryFeeService = deliveryFeeService;
+        _promoCodeRespository = promoCodeRespository;
     }
 
     [Route("v1/orders")]
     [HttpPost]
     public async Task<IActionResult> Place(string customerId, string zipCode, string promoCode, int[] products)
     {
-        // #1 - Recupera o cliente
         Customer? customer = await _customerRepository.GetByIdAsync(customerId);
         if (customer == null)
             return NotFound();
 
-        await using (var conn = new SqlConnection("CONN_STRING"))
-        {
-            const string query = "SELECT [Id], [Name], [Email] FROM CUSTOMER WHERE ID=@id";
-            customer = await conn.QueryFirstAsync<Customer>(query, new { id = customerId });
-        }
-
-        // #2 - Calcula o frete
         decimal deliveryFee = await _deliveryFeeService.GetDeliveryFeeAsync(zipCode);
+        PromoCode? cupom = await _promoCodeRespository.GetPromoCodeAsync(promoCode);
 
         // #3 - Calcula o total dos produtos
         decimal subTotal = 0;
