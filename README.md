@@ -41,6 +41,7 @@ Ref.: Balta.io
 <ul>
     <li><a href="#pratica-apresentacao">Apresentação</a></li>
     <li><a href="#pratica-criando">Criando dependências</a></li>    
+    <li><a href="#pratica-dip">DIP na prática</a></li>    
 </ul>
 
 </details>
@@ -755,6 +756,63 @@ public class CustomerRepository
 
     }
 }
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region DIP na prática -->
+
+<details id="pratica-dip"><summary>DIP na prática</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Criação de um novo item **Repositories/Contracts/ICustomerRepository.cs**:
+
+```c#
+using DependencyStore.Models;
+
+namespace DependencyStore.Repositories.Contracts;
+
+public interface ICustomerRepository
+{
+    Task<Customer?> GetByIdAsync(string customerId);
+}
+```
+
+**CustomerRepository** passa a implementar a interface:
+
+```c#
+...
+public class CustomerRepository : ICustomerRepository
+...
+```
+
+Refatoração do **OrderController**:
+
+```c#
+public class OrderController : ControllerBase
+{
+    private readonly ICustomerRepository _customerRepository;
+
+    public OrderController(ICustomerRepository customerRepository)
+    {
+        _customerRepository = customerRepository;
+    }
+
+    [Route("v1/orders")]
+    [HttpPost]
+    public async Task<IActionResult> Place(string customerId, string zipCode, string promoCode, int[] products)
+    {
+        // #1 - Recupera o cliente
+        Customer? customer = await _customerRepository.GetByIdAsync(customerId);
+        if (customer == null)
+            return NotFound();
+        
+        ...
 ```
 
 </details>
