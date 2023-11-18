@@ -34,6 +34,18 @@ Ref.: Balta.io
 
 <!--#endregion -->
 
+<!--#region DI, IoC e DIP na prática -->
+
+<details><summary>DI, IoC e DIP na prática</summary>
+
+<ul>
+    <li><a href="#pratica-apresentacao">Apresentação</a></li>
+</ul>
+
+</details>
+
+<!--#endregion -->
+
 <!--#endregion -->
 
 <!--#region Fundamentos -->
@@ -670,6 +682,22 @@ builder
 - **IoC** (padrão de design, desacoplamento)
 - **DIP** (príncipio, depender das abstrações)
 - **Service Locator** (de-para)
+
+</details>
+
+<!--#endregion -->
+
+<!--#endregion -->
+
+<!--#region DI, IoC e DIP na prática -->
+
+<h2 id="pratica">DI, IoC e DIP na prática</h2>
+
+<!--#region Apresentação -->
+
+<details id="pratica-apresentacao"><summary>Apresentação</summary>
+
+<br/>
 
 </details>
 
