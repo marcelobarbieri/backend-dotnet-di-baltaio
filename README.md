@@ -51,6 +51,18 @@ Ref.: Balta.io
 
 <!--#endregion -->
 
+<!--#region Resolvendo as dependências -->
+
+<details><summary>Resolvendo as dependências</summary>
+
+<ul>
+    <li><a href="#depend-addtransient">Resolvendo as dependências - AddTransient</a></li>
+</ul>
+
+</details>
+
+<!--#endregion -->
+
 <!--#endregion -->
 
 <!--#region Fundamentos -->
@@ -1057,6 +1069,51 @@ Refatoração do controlador **OrderController**:
     }
     
     ...
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#endregion -->
+
+<!--#region Resolvendo as dependências -->
+
+<h2 id="pratica">Resolvendo as dependências</h2>
+
+<!--#region Resolvendo as dependências - AddTransient -->
+
+<details id="depend-addtransient"><summary>Resolvendo as dependências - AddTransient</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Se o projeto for executado o controlador falhará porque existem dependências não resolvidas.
+
+As dependências devem ser resolvidas antes de adicionar serviços para os controladores **builder.Services.AddControllers()** no **Program.cs**:
+
+```c# 
+...
+using DependencyStore.Repositories;
+using DependencyStore.Repositories.Contracts;
+using DependencyStore.Services;
+using DependencyStore.Services.Contracts;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+builder.Services.AddTransient<IPromoCodeRepository, PromoCodeRepository>();
+builder.Services.AddTransient<IDeliveryFeeService, DeliveryFeeService>();
+
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+app.MapControllers();
+
+app.Run();
+...
 ```
 
 </details>
