@@ -26,6 +26,7 @@ Ref.: Balta.io
     <li><a href="#fund-dip">Princípio da Inversão de Dependência</a></li>
     <li><a href="#fund-service-locator">Service Locator</a></li>    
     <li><a href="#fund-add">AddTransient, AddScoped, AddSingleton</a></li>    
+    <li><a href="#fund-adddbcontext">AddDbContext</a></li>    
 </ul>
 
 </details>
@@ -633,6 +634,26 @@ AddSingleton
 - **Mantém este objeto** na memória até a aplicação parar ou reiniciar
 - Sempre devolver a **mesma instância** deste objeto, com os mesmos valores
 - **CUIDADO**
+
+</details>
+
+<!--#endregion -->
+
+<!--#region AddDbContext -->
+
+<details id="fund-adddbcontext"><summary>AddDbContext</summary>
+
+<br/>
+
+- Item **especial** do tipo **Scoped**
+- Utilizado exclusivamente com **Entity Framework**
+- Garante que a conexão só dura **até o fim da requisição**
+
+```c#
+builder
+  .Services
+  .AddDbContext<BlogDataContext>(x => x.UseSqlServer(connStr));
+```
 
 </details>
 
