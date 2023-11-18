@@ -44,6 +44,7 @@ Ref.: Balta.io
     <li><a href="#pratica-dip">DIP na prática</a></li>    
     <li><a href="#pratica-servicos">Utilizando serviços</a></li>    
     <li><a href="#pratica-promocode">PromoCode Respository</a></li>    
+    <li><a href="#pratica-regras">Removendo as regras de negócio do controlador</a></li>    
 </ul>
 
 </details>
@@ -996,6 +997,69 @@ public class OrderController : ControllerBase
         
         ...
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Removendo as regras de negócio do controlador -->
+
+<details id="pratica-regras"><summary>Removendo as regras de negócio do controlador</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Ajustes no modelo **Order.cs** com a implementação do construtor, alteração do tipo de dado da lista de produtos **Products** e as fórmulas para as propriedades **SubTotal** e **Total** :
+
+```c#
+namespace DependencyStore.Models;
+
+public class Order
+{
+    public Order(
+        decimal deliveryFee,
+        decimal discount,
+        List<Product> products)
+    {
+        Code = Guid.NewGuid().ToString().ToUpper().Substring(0, 8);
+        Date = DateTime.Now;
+        DeliveryFee = deliveryFee;
+        Discount = discount;
+    }
+
+    public string Code { get; set; }
+    public DateTime Date { get; set; }
+    public decimal DeliveryFee { get; set; }
+    public decimal Discount { get; set; }
+    public List<Product> Products { get; set; }
+
+    public decimal SubTotal => Products.Sum(x => x.Price);
+    public decimal Total => SubTotal - Discount + DeliveryFee;
+}
+```
+
+Refatoração do controlador **OrderController**:
+
+```c#
+...
+
+    [Route("v1/orders")]
+    [HttpPost]
+    public async Task<IActionResult> Place(string customerId, string zipCode, string promoCode, int[] products)
+    {
+      
+      ...
+
+        decimal discount = cupom?.Value ?? 0M;
+        Order order = new Order(deliveryFee, discount, new List<Product>());
+        return Ok($"Pedido {order.Code} gerado com sucesso!");
+    }
+    
+    ...
+```
+
+</details>
 
 <!--#endregion -->
 
