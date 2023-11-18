@@ -57,6 +57,7 @@ Ref.: Balta.io
 
 <ul>
     <li><a href="#depend-addtransient">Resolvendo as dependências - AddTransient</a></li>
+    <li><a href="#depend-addscoped">Resolvendo as dependências - AddScoped</a></li>
 </ul>
 
 </details>
@@ -1115,6 +1116,53 @@ app.MapControllers();
 app.Run();
 ...
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Resolvendo as dependências - AddScoped -->
+
+<details id="depend-addtransient"><summary>Resolvendo as dependências - AddScoped</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Para as conexões com o banco teremos apenas um objeto por requisição.
+
+Precisamos de uma única instância do banco de dados para a implementação das interfaces que fazem uso do **SqlConnection**.
+
+Se for utilizado **AddTransient** cada interface instanciará um objeto de conexão ao banco de dados para o **SqlConnection**, não desejado. Não faz sentido, pois dados estão sendo manipulados dentro de uma mesma instância do objeto
+
+Por isso resolve-se a dependência do **SqlConnection** no **Program.cs** com  **AddScoped**, antes de resolver a dependência das interfaces que a utilizam:
+
+```c#
+using DependencyStore.Repositories;
+using DependencyStore.Repositories.Contracts;
+using DependencyStore.Services;
+using DependencyStore.Services.Contracts;
+using Microsoft.Data.SqlClient;
+
+var builder = WebApplication.CreateBuilder(args);
+
+//builder.Services.AddScoped<SqlConnection>(); 
+//ou
+builder.Services.AddScoped(x => new SqlConnection("CONN_STRING"));
+builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+builder.Services.AddTransient<IPromoCodeRepository, PromoCodeRepository>();
+builder.Services.AddTransient<IDeliveryFeeService, DeliveryFeeService>();
+
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+app.MapControllers();
+
+app.Run();
+```
+
+Porém para banco de dados é recomendado utilizar o **AddDbContext** ao invés do **AddContext**
 
 </details>
 
