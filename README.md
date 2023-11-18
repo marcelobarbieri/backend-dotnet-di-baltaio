@@ -23,6 +23,7 @@ Ref.: Balta.io
     <li><a href="#fund-inversao">Inversão de Controle</a></li>
     <li><a href="#fund-abstracao">Abstração e Implementação</a></li>
     <li><a href="#fund-por-que">Por que abstrair?</a></li>
+    <li><a href="#fund-dip">Princípio da Inversão de Dependência</a></li>
 </ul>
 
 </details>
@@ -507,6 +508,69 @@ Cobre o pé... descobre a cabeça
 - **Testes de Unidade**
   - Não podem depender de banco, rede ou qualquer outra coisa externa
 - Se você depende da abstração, **a implementação não importa**
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Princípio da Inversão de Dependência -->
+
+<details id="fund-dip"><summary>Princípio da Inversão de Dependência</summary>
+
+<br/>
+
+**DIP - Dependency Inversion Principle**
+
+- Princípio da **inversão de dependência**
+- Depender de **abstrações** e não de **implementações**
+
+```c#
+public interface IDeliveryService
+{
+  decimal GetDeliveryFee(string zipCode);
+}
+```
+
+```c#
+public class DeliveryService : IDeliveryService
+{
+  public decimal GetDeliveryFee(string zipCode)
+  {
+    ...
+  }
+}
+```
+
+```c#
+public class OrderController : Controller
+{
+  private readonly IDeliveryService _deliveryService;
+
+  OrderController(IDeliveryService deliveryService)
+  {
+    _deliveryService = deliveryService;
+  }
+  ...
+}
+```
+
+```c#
+public FakeDeliveryService : IDeliveryService
+{
+  public decimal GetDeliveryFee(string zipCode)
+  {
+    return 10;
+  }
+}
+
+[TestMethod]
+public void ShouldPlaceAnOrder()
+{
+  IDeliveryService service = new FakeDeliveryService();
+  var controller = new OrderController(service);  
+  ...
+}
+```
 
 </details>
 
