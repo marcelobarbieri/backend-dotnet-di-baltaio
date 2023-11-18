@@ -40,6 +40,7 @@ Ref.: Balta.io
 
 <ul>
     <li><a href="#pratica-apresentacao">Apresentação</a></li>
+    <li><a href="#pratica-criando">Criando dependências</a></li>    
 </ul>
 
 </details>
@@ -700,6 +701,61 @@ builder
 <br/>
 
 [Projeto 1](./Projetos/Projeto%201/)
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Criando dependências -->
+
+<details id="pratica-criando"><summary>Criando dependências</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Refatoração do bloco #1 existente no **OrderController**:
+
+```c#
+        ...
+        // #1 - Recupera o cliente
+        Customer customer = null;
+        await using (var conn = new SqlConnection("CONN_STRING"))
+        {
+            const string query = "SELECT [Id], [Name], [Email] FROM CUSTOMER WHERE ID=@id";
+            customer = await conn.QueryFirstAsync<Customer>(query, new { id = customerId });
+        }
+        ...
+```
+
+Criação de um novo item **Repositories/CustomerRepository.cs**:
+
+```c#
+using Dapper;
+using DependencyStore.Models;
+using Microsoft.Data.SqlClient;
+
+namespace DependencyStore.Repositories;
+
+public class CustomerRepository
+{
+    private readonly SqlConnection _connection;
+
+    public CustomerRepository(SqlConnection connection)
+        => _connection = connection;
+
+    public async Task<Customer?> GetByIdAsync(string customerId)
+    {
+        const string query = "SELECT [Id], [Name], [Email] FROM CUSTOMER WHERE ID=@id";
+        return await _connection
+            .QueryFirstOrDefaultAsync<Customer>(query, new 
+            { 
+                id = customerId 
+            });
+
+    }
+}
+```
 
 </details>
 
