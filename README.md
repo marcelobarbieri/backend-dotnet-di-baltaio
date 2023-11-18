@@ -42,6 +42,7 @@ Ref.: Balta.io
     <li><a href="#pratica-apresentacao">Apresentação</a></li>
     <li><a href="#pratica-criando">Criando dependências</a></li>    
     <li><a href="#pratica-dip">DIP na prática</a></li>    
+    <li><a href="#pratica-servicos">Utilizando serviços</a></li>    
 </ul>
 
 </details>
@@ -812,6 +813,104 @@ public class OrderController : ControllerBase
         if (customer == null)
             return NotFound();
         
+        ...
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Utilizando serviço -->
+
+<details id="pratica-servicos"><summary>Utilizando serviço</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Refatoração do bloco #2 existente no **OrderController**:
+
+```c#
+...
+        // #2 - Calcula o frete
+        decimal deliveryFee = 0;
+        var client = new RestClient("https://consultafrete.io/cep/");
+        var request = new RestRequest()
+            .AddJsonBody(new
+            {
+                zipCode
+            });
+        deliveryFee = await client.PostAsync<decimal>(request, new CancellationToken());
+        // Nunca é menos que R$ 5,00
+        if (deliveryFee < 5)
+            deliveryFee = 5;
+...
+```
+
+Criação do item **Services/Contracts/IDeliveryFeeService.cs**:
+
+```c#
+namespace DependencyStore.Services.Contracts;
+
+public interface IDeliveryFeeService
+{
+    Task<decimal> GetDeliveryFeeAsync(string zipCode);
+}
+```
+
+
+Criação do item **Services/DeliveryFeeService.cs**
+
+```c#
+using DependencyStore.Services.Contracts;
+using RestSharp;
+
+namespace DependencyStore.Services
+{
+    public class DeliveryFeeService : IDeliveryFeeService
+    {
+        public async Task<decimal> GetDeliveryFeeAsync(string zipCode)
+        {
+            var client = new RestClient("https://consultafrete.io/cep/");
+            var request = new RestRequest()
+                .AddJsonBody(new
+                {
+                    ZipCode = zipCode
+                });
+            var response = await client.PostAsync<decimal>(request);
+            return response < 5 ? 5 : response;
+        }
+    }
+}
+```
+
+Inserção da nova dependência no **OrderController**:
+
+```c#
+...
+
+public class OrderController : ControllerBase
+{
+    private readonly ICustomerRepository _customerRepository;
+    private readonly IDeliveryFeeService _deliveryFeeService;
+
+    public OrderController(
+        ICustomerRepository customerRepository,
+        IDeliveryFeeService deliveryFeeService)
+    {
+        _customerRepository = customerRepository;
+        _deliveryFeeService = deliveryFeeService;
+    }
+
+    [Route("v1/orders")]
+    [HttpPost]
+    public async Task<IActionResult> Place(string customerId, string zipCode, string promoCode, int[] products)
+    {
+        ...
+
+        // #2 - Calcula o frete
+        decimal deliveryFee = await _deliveryFeeService.GetDeliveryFeeAsync(zipCode);
+
         ...
 ```
 
