@@ -24,6 +24,7 @@ Ref.: Balta.io
     <li><a href="#fund-abstracao">Abstração e Implementação</a></li>
     <li><a href="#fund-por-que">Por que abstrair?</a></li>
     <li><a href="#fund-dip">Princípio da Inversão de Dependência</a></li>
+    <li><a href="#fund-service-locator">Service Locator</a></li>    
 </ul>
 
 </details>
@@ -570,6 +571,32 @@ public void ShouldPlaceAnOrder()
   var controller = new OrderController(service);  
   ...
 }
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Service Locator -->
+
+<details id="fund-service-locator"><summary>Service Locator</summary>
+
+<br/>
+
+Service Locator e DI no ASP.NET
+
+- SL diz **como resolver** as dependências criadas
+  - Funciona como um de-para
+- Já temos um pronto no **ASP.NET**
+  - Podemos utilizar outros
+
+```c#
+// Assim
+builder.Services.AddTransient<IDeliveryFeeService, DeliveryFeeService>();
+// ou
+builder.Services.AddScoped<IDeliveryFeeService, DeliveryFeeService>();
+// ou
+builder.Services.AddSingleton<IDeliveryFeeService, DeliveryFeeService>();
 ```
 
 </details>
