@@ -26,7 +26,8 @@ Ref.: Balta.io
     <li><a href="#fund-dip">Princípio da Inversão de Dependência</a></li>
     <li><a href="#fund-service-locator">Service Locator</a></li>    
     <li><a href="#fund-add">AddTransient, AddScoped, AddSingleton</a></li>    
-    <li><a href="#fund-adddbcontext">AddDbContext</a></li>    
+    <li><a href="#fund-adddbcontext">AddDbContext</a></li>
+    <li><a href="#fund-resumo">Resumo</a></li>    
 </ul>
 
 </details>
@@ -654,6 +655,21 @@ builder
   .Services
   .AddDbContext<BlogDataContext>(x => x.UseSqlServer(connStr));
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Resumo -->
+
+<details id="fund-resumo"><summary>Resumo</summary>
+
+<br/>
+
+- **DI** (técnica que aplica IoC)
+- **IoC** (padrão de design, desacoplamento)
+- **DIP** (príncipio, depender das abstrações)
+- **Service Locator** (de-para)
 
 </details>
 
