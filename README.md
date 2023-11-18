@@ -21,6 +21,7 @@ Ref.: Balta.io
     <li><a href="#fund-resolvendo">Resolvendo o problema com OOP</a></li>
     <li><a href="#fund-descobre">Cobre o pé, descobre a cabeça</a></li>
     <li><a href="#fund-inversao">Inversão de Controle</a></li>
+    <li><a href="#fund-abstracao">Abstração e Implementação</a></li>
 </ul>
 
 </details>
@@ -466,6 +467,52 @@ public void ShouldPlaceAnOrder()
   var service = new DeliveryService();
   var controller = new OrderController(service);
   ...
+}
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Inversão de Controle -->
+
+<details id="fund-abstracao"><summary>Abstração e Implementação</summary>
+
+<br/>
+
+Cobre o pé... descobre a cabeça
+
+- Implementação
+  - **Concreto**
+  - **Materialização**
+  - É o **"Como"**
+- Abstração
+  - **Contrato**
+  - Só as **definições**
+  - É o *"O que"**
+
+```c#
+public class DeliveryService
+{
+  public decimal GetDeliveryFee(string zipCode)
+  {
+    var request = new HttpRequestMessage(HttpMethod.Get, "URL/" + zipCode);
+    request.Headers.Add("Accept","application/json");
+    request.Headers.Add("User-Agent","HttpClientFactory-Sample");
+
+    using (HttpClient client = new HttpClient())
+    {
+      var response = await client.SendAsync(request);
+      if (response.IsSuccessStatusCode)
+      {
+        deliveryFee = await response.Content.ReadAsAsync<decimal>();
+      }
+      else
+      {
+        deliveryFee = 5;
+      }
+    }
+  }
 }
 ```
 
