@@ -25,6 +25,7 @@ Ref.: Balta.io
     <li><a href="#fund-por-que">Por que abstrair?</a></li>
     <li><a href="#fund-dip">Princípio da Inversão de Dependência</a></li>
     <li><a href="#fund-service-locator">Service Locator</a></li>    
+    <li><a href="#fund-add">AddTransient, AddScoped, AddSingleton</a></li>    
 </ul>
 
 </details>
@@ -598,6 +599,40 @@ builder.Services.AddScoped<IDeliveryFeeService, DeliveryFeeService>();
 // ou
 builder.Services.AddSingleton<IDeliveryFeeService, DeliveryFeeService>();
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region AddTransient, AddScoped, AddSingleton -->
+
+<details id="fund-add"><summary>AddTransient, AddScoped, AddSingleton</summary>
+
+<br/>
+
+AddTransient
+
+- Sempre cria uma **nova instância** do objeto
+- Ideal para cenários onde queremos sempre um **novo objeto**
+
+AddScoped
+
+- Cria **um objeto** por transação (requisição)
+- Se você chamar 2 ou mais serviços que dependem do **mesmo objeto**, a mesma instância será utilizada
+- Ideal para cenários onde queremos **apenas um objeto** por requisição (banco)
+
+Singleton
+
+- Padrão que visa garantir **apenas uma instância** de um objeto para **aplicação toda**
+- Um bom exemplo são as **configurações**
+  - Uma vez carregadas, **ficam até a aplicação reiniciar**
+
+AddSingleton
+
+- Cria **um objeto** quando a aplicação inicia
+- **Mantém este objeto** na memória até a aplicação parar ou reiniciar
+- Sempre devolver a **mesma instância** deste objeto, com os mesmos valores
+- **CUIDADO**
 
 </details>
 
