@@ -60,6 +60,7 @@ Ref.: Balta.io
     <li><a href="#depend-addscoped">Resolvendo as dependências - AddScoped</a></li>
     <li><a href="#depend-addsingleton">Resolvendo as dependências - AddSingleton</a></li>
     <li><a href="#depend-extension-methods">Extension Methods</a></li>
+    <li><a href="#depend-outras-formas">Outras formas de DI</a></li>
 </ul>
 
 </details>
@@ -1299,6 +1300,30 @@ builder.Services.AddServices();
 var app = builder.Build();
 
 ...
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Outras formas de DI -->
+
+<details id="depend-outras-formas"><summary>Outras formas de DI</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+As interfaces não são necessárias para ter ou resolver dependências. 
+
+As interfaces são necessárias para implementação do **DIP - Dependency Inversion Principle** 
+
+```c#
+public static void AddRepositories(this IServiceCollection services)
+{
+  services.AddTransient<CustomerRepository>();
+  services.AddTransient<new CustomerRepository>();
+}
 ```
 
 </details>
