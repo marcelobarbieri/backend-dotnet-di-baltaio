@@ -62,6 +62,7 @@ Ref.: Balta.io
     <li><a href="#depend-extension-methods">Extension Methods</a></li>
     <li><a href="#depend-outras-formas">Outras formas de DI</a></li>
     <li><a href="#depend-impl-extension-methods">Implementando Extension Methods</a></li>
+    <li><a href="#depend-add-parte1">AddTransient, AddScoped e AddSingleton na prática - Parte 1</a></li>
 </ul>
 
 </details>
@@ -1405,6 +1406,20 @@ builder.Services.AddServices();
 
 ...
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region AddTransient, AddScoped e AddSingleton na prática - Parte 1 -->
+
+<details id="depend-impl-extension-methods"><summary>AddTransient, AddScoped e AddSingleton na prática - Parte 1</summary>
+
+<br/>
+
+[Projeto 2](./Projetos/Projeto%202/)
+
+Ciclos de Vida
 
 </details>
 
