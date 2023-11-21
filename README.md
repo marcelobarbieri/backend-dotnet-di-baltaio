@@ -61,6 +61,7 @@ Ref.: Balta.io
     <li><a href="#depend-addsingleton">Resolvendo as dependências - AddSingleton</a></li>
     <li><a href="#depend-extension-methods">Extension Methods</a></li>
     <li><a href="#depend-outras-formas">Outras formas de DI</a></li>
+    <li><a href="#depend-impl-extension-methods">Implementando Extension Methods</a></li>
 </ul>
 
 </details>
@@ -1324,6 +1325,85 @@ public static void AddRepositories(this IServiceCollection services)
   services.AddTransient<CustomerRepository>();
   services.AddTransient<new CustomerRepository>();
 }
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Implementando Extension Methods -->
+
+<details id="depend-impl-extension-methods"><summary>Implementando Extension Methods</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Criação do item **Extensions/DependenciesExtension.cs**:
+
+```c#
+using DependencyStore.Repositories;
+using DependencyStore.Repositories.Contracts;
+using DependencyStore.Services;
+using DependencyStore.Services.Contracts;
+using Microsoft.Data.SqlClient;
+
+namespace DependencyStore.Extensions;
+
+public static class DependenciesExtension
+{
+    public static void AddConfiguration (this IServiceCollection services)
+    {
+        services.AddSingleton<Configuration>();        
+    }
+
+    public static void AddSqlConnection
+        (this IServiceCollection services,
+        string connectionString)
+    {
+        services.AddScoped<SqlConnection>(x 
+            => new SqlConnection(connectionString));
+    }
+
+    public static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddTransient<ICustomerRepository, CustomerRepository>();
+        services.AddTransient<IPromoCodeRepository, PromoCodeRepository>();
+    }
+
+    public static void AddServices(this IServiceCollection services) 
+    {
+        services.AddTransient<IDeliveryFeeService, DeliveryFeeService>();
+    }
+}
+```
+
+Ajuste no **AppSettings.json** para informar a **Connection String**:
+
+```json
+{
+  ...
+
+  "ConnectionStrings": {
+    "DefaultConnection": "CONN_STRING"
+  }
+}
+```
+
+Refatoração do **Program.cs**:
+
+```c#
+...
+
+builder.Services.AddConfiguration();
+
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddSqlConnection(connStr);
+builder.Services.AddRepositories();
+builder.Services.AddServices();
+
+...
 ```
 
 </details>
