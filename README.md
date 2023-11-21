@@ -64,6 +64,7 @@ Ref.: Balta.io
     <li><a href="#depend-impl-extension-methods">Implementando Extension Methods</a></li>
     <li><a href="#depend-add-parte1">AddTransient, AddScoped e AddSingleton na prática - Parte 1</a></li>
     <li><a href="#depend-add-parte2">AddTransient, AddScoped e AddSingleton na prática - Parte 2</a></li>
+    <li><a href="#depend-mais-impl">Registrando mais de uma implementação</a></li>
 </ul>
 
 </details>
@@ -1452,6 +1453,119 @@ Ciclos de Vida
     }
 }
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Registrando mais de uma implementação -->
+
+<details id="depend-mais-impl"><summary>Registrando mais de uma implementação</summary>
+
+<br/>
+
+Um pouco mais...
+
+- Se podemos ter mais de uma implementação por interface...
+- O que acontece quando registramos mais de um serviço?
+
+```c#
+public interface IService
+{
+}
+
+public class ServiceOne : IService
+{
+}
+
+public class ServiceTwo : IService
+{
+}
+```
+
+```c#
+builder.Services.AddTransient<IService, ServiceOne>();
+builder.Services.AddTransient<IService, ServiceTwo>();
+```
+
+Sempre o último...
+
+- Neste caso, como **não especificamos** a implementação, sempre será retornado a **última registrada**
+- No exemplo seria o **ServiceTwo**
+
+```c#
+private readonly IService _service;]
+
+public OrderController(IService service)
+  => _service = service;
+
+[Route("/")]
+[HttpGet]
+public IActionResult Get()
+{
+  return Ok(new
+  {
+    _service.GetType().Name
+  });
+}
+```
+
+Inclusive pode isto aqui
+
+```c#
+builder.Services.AddTransient<IService, ServiceOne>();
+builder.Services.AddTransient<IService, ServiceOne>();
+builder.Services.AddTransient<IService, ServiceOne>();
+builder.Services.AddTransient<IService, ServiceTwo>();
+```
+
+Não significa que ele somente registrou o último
+
+```c#
+private readonly IEnumerable<IService> _service;
+
+public OrderController(IEnumerable<IService> service)
+  => _service = service;
+
+[Route("/")]
+[HttpGet]
+public IActionResult Get()
+{
+  return Ok(_service.Select(x => x.GetType().Name));
+}
+```
+
+```json
+[
+  "ServiceOne",
+  "ServiceOne",
+  "ServiceOne",
+  "ServiceTwo"
+]
+```
+
+Em resumo...
+
+- Os serviços **estão sendo registrados**
+- Porém o comportamento quando resolvemos um serviço é de **obter apenas o último**
+
+```c#
+private readonly IService _service;
+
+public OrderController(IService service)
+  => _service = service;
+
+[Route("/")]
+[HttpGet]
+public IActionResult Get()
+{
+  return Ok(new
+  {
+    _service.GetType().Name
+  });
+}
+```
+
 
 </details>
 
