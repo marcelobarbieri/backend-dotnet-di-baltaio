@@ -63,6 +63,7 @@ Ref.: Balta.io
     <li><a href="#depend-outras-formas">Outras formas de DI</a></li>
     <li><a href="#depend-impl-extension-methods">Implementando Extension Methods</a></li>
     <li><a href="#depend-add-parte1">AddTransient, AddScoped e AddSingleton na prática - Parte 1</a></li>
+    <li><a href="#depend-add-parte2">AddTransient, AddScoped e AddSingleton na prática - Parte 2</a></li>
 </ul>
 
 </details>
@@ -1420,6 +1421,37 @@ builder.Services.AddServices();
 [Projeto 2](./Projetos/Projeto%202/)
 
 Ciclos de Vida
+
+</details>
+
+<!--#endregion -->
+
+<!--#region AddTransient, AddScoped e AddSingleton na prática - Parte 2 -->
+
+<details id="depend-impl-extension-methods"><summary>AddTransient, AddScoped e AddSingleton na prática - Parte 2</summary>
+
+<br/>
+
+[Projeto 2](./Projetos/Projeto%202/)
+
+Ciclos de Vida
+
+```json
+{
+    "id": "70471d16-533b-4646-b455-8a5d83a536ae",
+    "primaryServiceId": "d6992245-4004-4f00-a86b-58d03e6b3eb3",
+    "secondaryService": {
+        "id": "bfd7778f-97db-4414-9af4-ef80387f691e",
+        "primaryServiceId": "d6992245-4004-4f00-a86b-58d03e6b3eb3"
+    },
+    "tertiaryService": {
+        "id": "9170ab1f-1916-4424-9666-41330779c547",
+        "primaryServiceId": "d6992245-4004-4f00-a86b-58d03e6b3eb3",
+        "secondaryServiceId": "bfd7778f-97db-4414-9af4-ef80387f691e",
+        "secondaryServiceNewInstanceId": "bfd7778f-97db-4414-9af4-ef80387f691e"
+    }
+}
+```
 
 </details>
 
