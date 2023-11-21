@@ -59,6 +59,7 @@ Ref.: Balta.io
     <li><a href="#depend-addtransient">Resolvendo as dependências - AddTransient</a></li>
     <li><a href="#depend-addscoped">Resolvendo as dependências - AddScoped</a></li>
     <li><a href="#depend-addsingleton">Resolvendo as dependências - AddSingleton</a></li>
+    <li><a href="#depend-extension-methods">Extension Methods</a></li>
 </ul>
 
 </details>
@@ -1222,6 +1223,81 @@ Se houverem configurações customizadas por usuário esse modelo não funcionar
 ```c#
 ...
 builder.Services.AddSingleton<Configuration>();
+...
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Extension Methods -->
+
+<details id="depend-extension-methods"><summary>Extension Methods</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Resolvendo a bagunça
+
+```c#
+...
+
+builder.Services.AddScoped(new SqlConnection());
+builder.Services.AddTransient<IProductRepository,ProductRepository>();
+builder.Services.AddTransient<ICustomerRepository,CustomerRepository>();
+builder.Services.AddTransient<IDiscountRepository,DiscountRepository>();
+builder.Services.AddTransient<IOrderRepository,OrderRepository>();
+builder.Services.AddTransient<IRoleRepository,RoleRepository>();
+builder.Services.AddTransient<ICartRepository,CartRepository>();
+
+...
+```
+
+Extension Methods
+
+- Permitem **adicionar comportamentos** as classes *built-in* do .NET
+- Como por exemplo o **WebApplicationBuilder.cs**
+  - Mesmo se a classe for selada
+
+```c#
+public sealed class WebApplicationBuilder
+{
+  ...
+  public IServiceCollection Services { get; }
+  ...
+}
+```
+
+Criação de uma nova classe e seu método de extensão, desde que eles sejam estáticos, receba o nome da classe que deseja-se extender, neste caso **IServiceCollection** e contenha na sua frente a palavra reservada **this**. As dependências estão sendo resolvidas dentro dos métodos **AddRepositories** e **AddServices**.
+
+```c#
+public static class DependenciesExtension
+{
+  public static void AddRepositories(this IServiceCollection services)
+  {
+    services.AddTransient<ICustomerRepository,CustomerRepository>();
+    services.AddTransient<IPromoCodeRepository,PromoCodeRepository>();
+    services.AddTransient<IDeliveryFeeService,DeliveryFeeService>();
+  }
+
+  public static void AddServices(this IServiceCollection services)
+  {
+    services.AddTransient<IDeliveryFeeService,DeliveryFeeService>();
+  }
+}
+```
+
+O **Program.cs** ficaria da forma abaixo:
+
+```c#
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRepositories();
+builder.Services.AddServices();
+
+var app = builder.Build();
+
 ...
 ```
 
