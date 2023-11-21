@@ -58,6 +58,7 @@ Ref.: Balta.io
 <ul>
     <li><a href="#depend-addtransient">Resolvendo as dependências - AddTransient</a></li>
     <li><a href="#depend-addscoped">Resolvendo as dependências - AddScoped</a></li>
+    <li><a href="#depend-addsingleton">Resolvendo as dependências - AddSingleton</a></li>
 </ul>
 
 </details>
@@ -1163,6 +1164,66 @@ app.Run();
 ```
 
 Porém para banco de dados é recomendado utilizar o **AddDbContext** ao invés do **AddContext**
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Resolvendo as dependências - AddSingleton -->
+
+<details id="depend-addsingleton"><summary>Resolvendo as dependências - AddSingleton</summary>
+
+<br/>
+
+[Projeto 1](./Projetos/Projeto%201/)
+
+Criação do item **Configuration.cs** com a propriedade **DeliveryFeeServiceUrl** para recuperar Url que será utilizada pela classe **DeliveryFeeService** a partir do **AppSettings.json**. 
+
+```c#
+namespace DependencyStore;
+
+public class Configuration
+{
+    public string DeliveryFeeServiceUrl { get; set; } = "";
+}
+```
+
+```json
+{
+  ...
+  "DeliveryFeeServiceUrl": "https://consultafrete.io/cep/"
+}
+```
+
+Injeção da dependência **Configuration** na classe **DeliveryFeeService** e sua utilização no método **GetDeliveryFeeAsync**.
+
+```c#
+namespace DependencyStore.Services
+{
+    public class DeliveryFeeService : IDeliveryFeeService
+    {
+        private readonly Configuration _configuration;
+
+        public DeliveryFeeService(Configuration configuration)
+            => _configuration = configuration;
+
+        public async Task<decimal> GetDeliveryFeeAsync(string zipCode)
+        {
+            var client = new RestClient(_configuration.DeliveryFeeServiceUrl);
+            
+            ...
+```
+
+A melhor forma para resolver esse tipo de dependência do **Configuration** que possui somente uma instância é com a utilização do **AddSingleton** e estará disponível para toda a aplicação, pois as configurações são as mesmas para toda a aplicação. 
+
+Recomendável utilizar **AddSingleton** para configurações do sistemas. 
+Se houverem configurações customizadas por usuário esse modelo não funcionará.
+
+```c#
+...
+builder.Services.AddSingleton<Configuration>();
+...
+```
 
 </details>
 
