@@ -71,6 +71,7 @@ Ref.: Balta.io
     <li><a href="#depend-tryaddtransient">TryAddTransient</a></li>
     <li><a href="#depend-tryaddenumerable">TryAddEnumerable</a></li>
     <li><a href="#depend-formas">Formas de resolver dependências</a></li>
+    <li><a href="#depend-program">Resolvendo dependências no Program.cs</a></li>
 </ul>
 
 </details>
@@ -1905,6 +1906,39 @@ public IEnumerable<WeatherForecast> Get(
   [FromServices] IWeatherService service)
   => service.Get();
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Resolvendo dependências no Program.cs -->
+
+<details id="depend-program"><summary>Resolvendo dependências no Program.cs</summary>
+
+<br/>
+
+No Program.cs
+
+Código explicitado:
+
+```c#
+var app = builder.Build(); 
+using(var scope = app.Services.CreateScope()) 
+{
+  var services = scope.ServiceProvider; 
+
+  var repository = services.GetRequiredService<ICustomerRepository>(); 
+  repository.CreateAsync(new Customer{"André Baltieri"});
+}
+```
+
+- Deve ser resolvido apos **var app = builder.Build();** no build da aplicação, no início da sua execução. Cuidado para não sobrecarregar o início da aplicação;
+- **using(var scope = app.Services.CreateScope())** garante que a aplicação e seus serviços já estejam registrados;
+- **var services = scope.ServiceProvider** fornece todos os serviços registrados. Dada uma implementação ou uma abstração é provida a sua instância;
+- **var repository = services.GetRequiredService<ICustomerRepository>()** recupera a instância de um serviço registrado.
+
+
+
 
 </details>
 
