@@ -70,6 +70,7 @@ Ref.: Balta.io
     <li><a href="#depend-multiplas">Resolvendo múltiplas dependências</a></li>
     <li><a href="#depend-tryaddtransient">TryAddTransient</a></li>
     <li><a href="#depend-tryaddenumerable">TryAddEnumerable</a></li>
+    <li><a href="#depend-formas">Formas de resolver dependências</a></li>
 </ul>
 
 </details>
@@ -1855,6 +1856,54 @@ builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, PrimaryS
 [
     "PrimaryService"
 ]
+```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Formas de resolver dependências -->
+
+<details id="depend-formas"><summary>Formas de resolver dependências</summary>
+
+<br/>
+
+Resolvendo Dependências
+
+- Construtor
+- Na assinatura do método
+- No program
+- No HttpContext
+
+> No construtor
+
+- **Private Readonly?** Variável somente leitura que pode ser atribuída somente no construtor.
+  - **Qual a diferença de const?** Obrigatória a atribuição de valor somente na sua declaração.
+
+```c#
+private readonly IWeatherService _service;
+
+public WeatherController(IWeatherService service)
+  => _service = service;
+
+[HttpGet("/")]
+public IEnumerable<WeatherForecast> Get()
+  => _service.Get();
+```  
+
+> FromServices
+
+Recomendável quando utilizado em **um único método**.
+Para **vários métodos** recomenda-se resolver no construtor.
+
+- Obtém direto dos serviços
+- No **.NET 7** não precisa mais especificar **[FromServices]**, assim como não precisa do **FromBody** e **FromRoute** por exemplo.
+
+```c#
+[HttpGet("/")]
+public IEnumerable<WeatherForecast> Get(
+  [FromServices] IWeatherService service)
+  => service.Get();
 ```
 
 </details>
