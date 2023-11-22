@@ -1,6 +1,6 @@
 ﻿namespace DependencyInjectionLifetimeSample.Services;
 
-public class TertiaryService
+public class TertiaryService : IService
 {
     private readonly PrimaryService _primaryService;
     private readonly SecondaryService _secondaryService;

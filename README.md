@@ -67,6 +67,7 @@ Ref.: Balta.io
     <li><a href="#depend-mais-impl">Registrando mais de uma implementação</a></li>
     <li><a href="#depend-service-descriptor">Service Descriptor</a></li>
     <li><a href="#depend-tryadd-tryaddenumerable">TryAdd e TryAddEnumerable</a></li>
+    <li><a href="#depend-multiplas">Resolvendo múltiplas dependências</a></li>
 </ul>
 
 </details>
@@ -1631,7 +1632,51 @@ TryAddEnumerable
 - Porém não permite duplicar (2 e 2, por exemplo)
 - Único (Interface e implementação)
 
+</details>
 
+<!--#endregion -->
+
+<!--#region Resolvendo múltiplas dependências -->
+
+<details id="depend-multiplas"><summary>Resolvendo múltiplas dependências</summary>
+
+<br/>
+
+[Projeto 2](./Projetos/Projeto%202/)
+
+Program.cs
+
+```c#
+...
+
+builder.Services.AddTransient<IService, PrimaryService>();
+
+...
+
+app.MapGet("/", (IService service) 
+    => Results.Ok(service.GetType().Name));
+
+...
+
+public interface IService
+{
+
+}
+```
+
+```c#
+public class PrimaryService : IService { }
+public class SecondaryService : IService { }
+public class TertiaryService : IService { }
+```
+
+```ps
+dotnet run
+```
+
+```json
+"PrimaryService"
+```
 
 </details>
 
