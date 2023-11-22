@@ -68,6 +68,7 @@ Ref.: Balta.io
     <li><a href="#depend-service-descriptor">Service Descriptor</a></li>
     <li><a href="#depend-tryadd-tryaddenumerable">TryAdd e TryAddEnumerable</a></li>
     <li><a href="#depend-multiplas">Resolvendo múltiplas dependências</a></li>
+    <li><a href="#depend-tryaddtransient">TryAddTransient</a></li>
 </ul>
 
 </details>
@@ -1677,6 +1678,109 @@ dotnet run
 ```json
 "PrimaryService"
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region TryAddTransient -->
+
+<details id="depend-tryaddtransient"><summary>TryAddTransient</summary>
+
+<br/>
+
+[Projeto 2](./Projetos/Projeto%202/)
+
+
+Program.cs:
+
+```c#
+...
+
+builder.Services.AddTransient<IService, PrimaryService>();
+builder.Services.AddTransient<IService, PrimaryService>();
+builder.Services.AddTransient<IService, SecondaryService>();
+
+...
+
+app.MapGet("/", (IService service) 
+    => Results.Ok(service.GetType().Name));
+
+...
+
+public interface IService
+{
+
+}
+```
+
+```c#
+public class PrimaryService : IService { }
+public class SecondaryService : IService { }
+public class TertiaryService : IService { }
+```
+
+Erro ocorrido pois existe mais de uma dependência para o serviço:
+
+```ps
+dotnet run 
+
+System.AggregateException: 'Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: IService Lifetime: Transient ImplementationType: DependencyInjectionLifetimeSample.Services.SecondaryService': Unable to resolve service for type 'DependencyInjectionLifetimeSample.Services.PrimaryService' while attempting to activate 'DependencyInjectionLifetimeSample.Services.SecondaryService'.)'
+```
+
+---
+
+Dada uma interface temos uma implementação.
+
+Program.cs:
+
+```c#
+...
+
+builder.Services.TryAddTransient<IService, PrimaryService>();
+builder.Services.TryAddTransient<IService, PrimaryService>();
+builder.Services.TryAddTransient<IService, SecondaryService>();
+
+...
+
+app.MapGet("/", (IEnumerable<IService> services) 
+    => Results.Ok(services.Select(x => x.GetType().Name)));
+
+...
+```
+
+```json
+[
+    "PrimaryService"
+]
+```
+
+---
+
+Program.cs:
+
+```c#
+...
+
+builder.Services.AddTransient<IService, PrimaryService>();
+builder.Services.AddTransient<IService, PrimaryService>();
+//builder.Services.AddTransient<IService, SecondaryService>();
+
+...
+
+app.MapGet("/", (IEnumerable<IService> services) 
+    => Results.Ok(services.Select(x => x.GetType().Name)));
+
+...
+```
+
+```json
+[
+    "PrimaryService",
+    "PrimaryService"
+]
+```
+
 
 </details>
 
