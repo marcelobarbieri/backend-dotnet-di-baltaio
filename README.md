@@ -69,6 +69,7 @@ Ref.: Balta.io
     <li><a href="#depend-tryadd-tryaddenumerable">TryAdd e TryAddEnumerable</a></li>
     <li><a href="#depend-multiplas">Resolvendo múltiplas dependências</a></li>
     <li><a href="#depend-tryaddtransient">TryAddTransient</a></li>
+    <li><a href="#depend-tryaddenumerable">TryAddEnumerable</a></li>
 </ul>
 
 </details>
@@ -1781,6 +1782,80 @@ app.MapGet("/", (IEnumerable<IService> services)
 ]
 ```
 
+
+</details>
+
+<!--#endregion -->
+
+<!--#region TryAddEnumerable -->
+
+<details id="depend-tryaddenumerable"><summary>TryAddEnumerable</summary>
+
+<br/>
+
+[Projeto 2](./Projetos/Projeto%202/)
+
+Ajuda a prevenir várias implementações para a mesma interface.
+
+Program.cs:
+
+```c#
+...
+
+var descriptor = new ServiceDescriptor(
+    typeof(IService),
+    typeof(PrimaryService),
+    ServiceLifetime.Transient);
+builder.Services.TryAddEnumerable(descriptor);
+
+...
+```
+
+```json
+[
+    "PrimaryService"
+]
+```
+
+---
+
+Não permite outra implementação para a mesma interface.
+
+Program.cs
+
+```c#
+...
+
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, PrimaryService>());
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, PrimaryService>()); // permite
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, SecondaryService>()); // não permite
+
+...
+```
+
+```ps
+System.AggregateException: 'Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: IService Lifetime: Singleton ImplementationType: DependencyInjectionLifetimeSample.Services.SecondaryService': Unable to resolve service for type 'DependencyInjectionLifetimeSample.Services.PrimaryService' while attempting to activate 'DependencyInjectionLifetimeSample.Services.SecondaryService'.)'
+```
+
+---
+
+Program.cs
+
+```c#
+...
+
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, PrimaryService>());
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, PrimaryService>()); // permite
+//builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, SecondaryService>()); // não permite
+
+...
+```
+
+```json
+[
+    "PrimaryService"
+]
+```
 
 </details>
 

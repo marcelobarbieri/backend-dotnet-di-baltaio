@@ -4,9 +4,15 @@ using System.Collections;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.TryAddTransient<IService, PrimaryService>();
-builder.Services.TryAddTransient<IService, PrimaryService>();
-builder.Services.TryAddTransient<IService, SecondaryService>();
+//var descriptor = new ServiceDescriptor(
+//    typeof(IService),
+//    typeof(PrimaryService),
+//    ServiceLifetime.Transient);
+//builder.Services.TryAddEnumerable(descriptor);
+
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, PrimaryService>());
+builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, PrimaryService>()); // permite
+//builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IService, SecondaryService>()); // não permite
 
 var app = builder.Build();
 
