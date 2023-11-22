@@ -65,6 +65,7 @@ Ref.: Balta.io
     <li><a href="#depend-add-parte1">AddTransient, AddScoped e AddSingleton na prática - Parte 1</a></li>
     <li><a href="#depend-add-parte2">AddTransient, AddScoped e AddSingleton na prática - Parte 2</a></li>
     <li><a href="#depend-mais-impl">Registrando mais de uma implementação</a></li>
+    <li><a href="#depend-service-descriptor">Service Descriptor</a></li>
 </ul>
 
 </details>
@@ -1566,6 +1567,30 @@ public IActionResult Get()
 }
 ```
 
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Service Descriptor -->
+
+<details id="depend-service-descriptor"><summary>Service Descriptor</summary>
+
+<br/>
+
+- Descreve **como resolver** uma dependência
+- Determina o **tipo** e **tempo de vida** dela
+- **AddTransient**, **AddScoped** e **AddSingleton** são **wrapers** deste item
+
+```c#
+var descriptor = new ServiceDescriptor(
+  typeof(IService), // Abstração
+  typeof(ServiceOne), // Implementação
+  ServiceLifetime.Singleton // Tempo de vida
+);
+
+builder.Services.Add(descriptor);
+```
 
 </details>
 
