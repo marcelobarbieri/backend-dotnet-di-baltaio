@@ -72,6 +72,7 @@ Ref.: Balta.io
     <li><a href="#depend-tryaddenumerable">TryAddEnumerable</a></li>
     <li><a href="#depend-formas">Formas de resolver dependências</a></li>
     <li><a href="#depend-program">Resolvendo dependências no Program.cs</a></li>
+    <li><a href="#depend-httpcontext">Resolvendo dependências no HttpContext.cs</a></li>    
 </ul>
 
 </details>
@@ -1937,8 +1938,40 @@ using(var scope = app.Services.CreateScope())
 - **var services = scope.ServiceProvider** fornece todos os serviços registrados. Dada uma implementação ou uma abstração é provida a sua instância;
 - **var repository = services.GetRequiredService<ICustomerRepository>()** recupera a instância de um serviço registrado.
 
+</details>
 
+<!--#endregion -->
 
+<!--#region Resolvendo dependências no HttpContext -->
+
+<details id="depend-httpcontext"><summary>Resolvendo dependências no HttpContext</summary>
+
+<br/>
+
+> Via **HttpContext**
+
+Utilizado quando fora do controlador e escopo da aplicação. Sendo obrigado a utilizar o **HttpContext**. Pode ser utilizado em **middlewares** ou qualquer outro lugar no ASP.NET que tenha acesso ao **HttpContext**.
+
+Basta saber como acessar o **HttpContext**.
+
+- Podemos *recuperar* os serviços registrados utilizando o **HttpContext**
+
+```c#
+public async Task OnActionExecutionAsync(
+  ActionExecutionContext context, // contexto de execução da ação, dentro dele tem-se o HttpContext
+  ActionExecutionDelegate next
+)
+{
+  var service = context
+    .HttpContext
+    .RequestServices
+    .GetService<IWeatherService>(); // obtem a instância de uma classe baseada na interface
+
+  // o service pode ser nulo, precisa ser tratado
+
+  var forecasts = service.Get();
+}
+```
 
 </details>
 
