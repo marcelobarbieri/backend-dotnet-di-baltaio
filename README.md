@@ -66,6 +66,7 @@ Ref.: Balta.io
     <li><a href="#depend-add-parte2">AddTransient, AddScoped e AddSingleton na prática - Parte 2</a></li>
     <li><a href="#depend-mais-impl">Registrando mais de uma implementação</a></li>
     <li><a href="#depend-service-descriptor">Service Descriptor</a></li>
+    <li><a href="#depend-tryadd-tryaddenumerable">TryAdd e TryAddEnumerable</a></li>
 </ul>
 
 </details>
@@ -1591,6 +1592,46 @@ var descriptor = new ServiceDescriptor(
 
 builder.Services.Add(descriptor);
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region TryAdd e TryAddEnumerable -->
+
+<details id="depend-tryadd-tryaddenumerable"><summary>TryAdd e TryAddEnumerable</summary>
+
+<br/>
+
+TryAdd*
+
+- Inverte o comportamento
+- Não dá erro, mas não duplica
+- Compara apenas a abstração
+  - Não registra duas implementações para uma mesma abstração (interface)
+
+```c#
+builder.Services.TryAddTransient<IService, ServiceOne>();
+builder.Services.TryAddTransient<IService, ServiceOne>();
+builder.Services.TryAddTransient<IService, ServiceOne>();
+builder.Services.TryAddTransient<IService, ServiceTwo>();
+```
+
+- Só vai registrar o **primeiro** item
+- Como já existe uma implementação registrada para a interface **IService** vai **ignorar as próximas tentativas** de registro
+
+```json
+["ServiceOne"]
+```
+
+TryAddEnumerable
+
+- TryAddEnumerable
+- Permite registrar ambos (1 e 2)
+- Porém não permite duplicar (2 e 2, por exemplo)
+- Único (Interface e implementação)
+
+
 
 </details>
 
