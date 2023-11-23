@@ -73,6 +73,7 @@ Ref.: Balta.io
     <li><a href="#depend-formas">Formas de resolver dependências</a></li>
     <li><a href="#depend-program">Resolvendo dependências no Program.cs</a></li>
     <li><a href="#depend-httpcontext">Resolvendo dependências no HttpContext.cs</a></li>    
+    <li><a href="#depend-fromservices">Quando utilizar FromServices</a></li>        
 </ul>
 
 </details>
@@ -1972,6 +1973,24 @@ public async Task OnActionExecutionAsync(
   var forecasts = service.Get();
 }
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Quando utilizar FromServices -->
+
+<details id="depend-fromservices"><summary>Quando utilizar FromServices</summary>
+
+<br/>
+
+[Projeto 3](./Projetos/Projeto%203/)
+
+Utilizar **[FromServices]** quando for utilizar somente em um método do controlador, e utilizar a injeção da dependência no construtor do controlador se for utilizado em vários métodos.
+
+[WeatherService.cs](./Projetos/Projeto%203/Services/WeatherService.cs)
+
+[WeatherForecastController.cs](./Projetos/Projeto%203/Controllers/WeatherForecastController.cs)
 
 </details>
 
