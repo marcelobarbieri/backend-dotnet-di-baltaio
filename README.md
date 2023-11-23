@@ -75,6 +75,7 @@ Ref.: Balta.io
     <li><a href="#depend-httpcontext">Resolvendo dependências no HttpContext.cs</a></li>    
     <li><a href="#depend-fromservices">Quando utilizar FromServices</a></li>
     <li><a href="#depend-getrequiredservices">GetRequiredServices</a></li>            
+    <li><a href="#depend-getservice">GetService</a></li>            
 </ul>
 
 </details>
@@ -2027,6 +2028,54 @@ using (var scope = app.Services.CreateScope())
 ...
 ```
 
+
+</details>
+
+<!--#endregion -->
+
+<!--#region GetService -->
+
+<details id="depend-getservice"><summary>GetService</summary>
+
+<br/>
+
+[Projeto 3](./Projetos/Projeto%203/)
+
+[ApiKeyAttribute.cs](./Projetos/Projeto%203/Attributes/ApiKeyAttribute.cs)
+
+```c#
+...
+
+[AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]
+public class ApiKeyAttribute : Attribute, IAsyncActionFilter
+{
+    ...
+    
+    public async Task OnActionExecutionAsync(
+        ActionExecutingContext context, 
+        ActionExecutionDelegate next)
+    {
+        var service = context
+            .HttpContext
+            .RequestServices
+            .GetService<IWeatherService>();
+        var forecasts = service?.Get();
+
+        ...
+```
+
+[WeatherForecastController.cs](./Projetos/Projeto%203/Controllers/WeatherForecastController.cs):
+
+```c#
+...
+
+    [ApiKey]
+    [HttpGet("/")]
+    public IEnumerable<WeatherForecast> Get()
+        => _service.Get();
+
+...
+```
 
 </details>
 
