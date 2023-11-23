@@ -89,6 +89,7 @@ Ref.: Balta.io
 <ul>
     <li><a href="#perguntas-entrevista">Hora de entrevista</a></li>
     <li><a href="#exercicios">Sugestão de projeto</a></li>
+    <li><a href="#conclusao">Conclusão</a></li>
 </ul>
 
 </details>
@@ -2136,6 +2137,16 @@ public class ApiKeyAttribute : Attribute, IAsyncActionFilter
   - Postar o resultado no repositório do GitHub do curso
 
 [Ponto de Partida](./Assets/Demos/06%20-%20exercicios/)
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Conclusão -->
+
+<details id="conclusao"><summary>Conclusão</summary>
+
+<br/>
 
 </details>
 
