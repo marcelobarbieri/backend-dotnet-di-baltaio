@@ -82,6 +82,18 @@ Ref.: Balta.io
 
 <!--#endregion -->
 
+<!--#region Perguntas e Exercícios -->
+
+<details><summary>Perguntas e Exercícios</summary>
+
+<ul>
+    <li><a href="#perguntas-entrevista">Hora de entrevista</a></li>
+</ul>
+
+</details>
+
+<!--#endregion -->
+
 <!--#endregion -->
 
 <!--#region Fundamentos -->
@@ -2076,6 +2088,36 @@ public class ApiKeyAttribute : Attribute, IAsyncActionFilter
 
 ...
 ```
+
+</details>
+
+<!--#endregion -->
+
+<!--#endregion -->
+
+<!--#region Perguntas e Exercícios -->
+
+<h2 id="perguntas">Perguntas e Exercícios</h2>
+
+<!--#region Hora de entrevista -->
+
+<details id="perguntas-entrevista"><summary>Hora de entrevista</summary>
+
+<br/>
+
+**Qual a diferença entre AddTransient, AddScoped e AddSingleton?**
+
+**Qual a finalidade do atributo FromServices?**
+
+**Podemos resolver dependências fora dos controladores?**
+
+**De forma resumida, você consegue me dizer o que é injeção de dependência?**
+
+**O que é Inversão de Controle?**
+
+**O que é Inversão de Dependência?** DIP
+
+**Qual a relação entre injeção de dependência, inversão de controle e inversão de dependência?**
 
 </details>
 
