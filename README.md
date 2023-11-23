@@ -73,7 +73,8 @@ Ref.: Balta.io
     <li><a href="#depend-formas">Formas de resolver dependências</a></li>
     <li><a href="#depend-program">Resolvendo dependências no Program.cs</a></li>
     <li><a href="#depend-httpcontext">Resolvendo dependências no HttpContext.cs</a></li>    
-    <li><a href="#depend-fromservices">Quando utilizar FromServices</a></li>        
+    <li><a href="#depend-fromservices">Quando utilizar FromServices</a></li>
+    <li><a href="#depend-getrequiredservices">GetRequiredServices</a></li>            
 </ul>
 
 </details>
@@ -1991,6 +1992,41 @@ Utilizar **[FromServices]** quando for utilizar somente em um método do control
 [WeatherService.cs](./Projetos/Projeto%203/Services/WeatherService.cs)
 
 [WeatherForecastController.cs](./Projetos/Projeto%203/Controllers/WeatherForecastController.cs)
+
+</details>
+
+<!--#endregion -->
+
+<!--#region GetRequiredServices -->
+
+<details id="depend-getrequiredservices"><summary>GetRequiredServices</summary>
+
+<br/>
+
+[Projeto 3](./Projetos/Projeto%203/)
+
+[Program.cs](./Projetos/Projeto%203/Program.cs)
+
+```c#
+...
+
+// resolução da dependência
+builder.Services.AddTransient<IWeatherService, WeatherService>();
+
+...
+
+// instância do serviço
+using (var scope = app.Services.CreateScope())
+{
+    var service = scope
+        .ServiceProvider
+        .GetRequiredService<IWeatherService>();
+    service.Get();
+}
+
+...
+```
+
 
 </details>
 
