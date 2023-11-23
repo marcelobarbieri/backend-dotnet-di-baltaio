@@ -88,6 +88,7 @@ Ref.: Balta.io
 
 <ul>
     <li><a href="#perguntas-entrevista">Hora de entrevista</a></li>
+    <li><a href="#exercicios">Sugestão de projeto</a></li>
 </ul>
 
 </details>
@@ -2118,6 +2119,23 @@ public class ApiKeyAttribute : Attribute, IAsyncActionFilter
 **O que é Inversão de Dependência?** DIP
 
 **Qual a relação entre injeção de dependência, inversão de controle e inversão de dependência?**
+
+</details>
+
+<!--#endregion -->
+
+<!--#region Sugestão de projeto -->
+
+<details id="exercicios"><summary>Sugestão de projeto</summary>
+
+<br/>
+
+- Reserva de quarto
+  - Utilizar AddTransient, Scoped e Singleton
+  - Separar em serviços e repositórios
+  - Postar o resultado no repositório do GitHub do curso
+
+[Ponto de Partida](./Assets/Demos/06%20-%20exercicios/)
 
 </details>
 
